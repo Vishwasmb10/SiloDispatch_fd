@@ -55,6 +55,13 @@
 			<version>1.18.30</version> <!-- latest as of July 2025 -->
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.10.0</version> <!-- Use latest stable -->
+		</dependency>
+
 	</dependencies>
 
 	<build>

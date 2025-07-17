@@ -25,12 +25,14 @@ public class Order {
     private DeliveryStatus deliveryStatus;
     private String address;
     private String pincode;
-    private Double lat;
-    private Double lon;
+//    private Double lat;
+//    private Double lon;
+    private BigDecimal distanceKm;
+    private BigDecimal amount;
     private OtpStatus otpStatus;
     private LocalDateTime createdAt;
 
-    public enum PaymentType { COD, UPI, PREPAID }
+    public enum PaymentType { COD, UPI, PREPAID, UNSPECIFIED}
     public enum PaymentStatus { PENDING, SUCCESS, FAILED }
     public enum DeliveryStatus { PENDING, ARRIVED, DELIVERED }
     public enum OtpStatus { NONE, SENT, VERIFIED }

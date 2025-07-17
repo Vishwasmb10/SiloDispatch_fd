@@ -1,7 +1,10 @@
 package com.example.SiloDispatch.repositories;
 
 import com.example.SiloDispatch.models.Order;
+import org.springframework.data.jdbc.repository.query.Modifying;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,5 +13,12 @@ import java.util.List;
 public interface OrderRepository extends CrudRepository<Order, Long> {
     List<Order> findByBatchId(Long batchId);
     List<Order> findByDriverId(Long driverId);
+
+    @Query("select * from orders where id=:orderId")
+    Order findByOrderId(@Param("orderId") Long orderId);
+
+//    @Modifying
+//    @Query("INSERT INTO orders(id, customerId, batchId, driverId, weightKg, paymentType, paymentStatus, deliveryStatus, address, pincode, lat, lon, otpStatus, createdAt) VALUES (:#{#o.id}, :#{#o.customerId}, :#{#o.batchId}, :#{#o.driverId}, :#{#o.weightKg}, :#{#o.paymentType}, :#{#o.paymentStatus}, :#{#o.deliveryStatus}, :#{#o.address}, :#{#o.pincode}, :#{#o.lat}, :#{#o.lon}, :#{#o.otpStatus}, :#{#o.createdAt})")
+//    public void insert(@Param("o")Order o);
 }
 
