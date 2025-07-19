@@ -51,6 +51,7 @@ public class OrderUploadService {
             order.setWeightKg(dto.getWeightKg());
             order.setPaymentType(Order.PaymentType.valueOf(dto.getPaymentType().toUpperCase()));
             order.setDeliveryStatus(Order.DeliveryStatus.PENDING);
+            order.setPaymentStatus(order.getPaymentType()==Order.PaymentType.PREPAID?Order.PaymentStatus.SUCCESS:Order.PaymentStatus.PENDING);
             order.setAddress(dto.getAddress());
             order.setPincode(dto.getPincode());
             order.setDistanceKm(dto.getDistanceKm());
