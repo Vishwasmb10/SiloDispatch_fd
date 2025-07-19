@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS customers (
     name VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     address TEXT NOT NULL,
-    pincode VARCHAR(10),
-
+    pincode VARCHAR(10)
 );
 
 -- drivers table

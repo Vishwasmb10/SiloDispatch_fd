@@ -14,7 +14,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
     Customer findByPhone(String phone);
 
     @Modifying
-    @Query("INSERT INTO customers(id, name, phone, address, pincode, lat, lon) VALUES (:#{#c.id}, :#{#c.name}, :#{#c.phone}, :#{#c.address}, :#{#c.pincode}, :#{#c.lat}, :#{#c.lon})")
+    @Query("INSERT INTO customers(id, name, phone, address, pincode) VALUES (:#{#c.id}, :#{#c.name}, :#{#c.phone}, :#{#c.address}, :#{#c.pincode})")
     void insert(@Param("c") Customer customer);
 
 

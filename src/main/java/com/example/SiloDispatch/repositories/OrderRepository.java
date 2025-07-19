@@ -1,5 +1,6 @@
 package com.example.SiloDispatch.repositories;
 
+import com.example.SiloDispatch.Dto.OrderForBatching;
 import com.example.SiloDispatch.models.Order;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
@@ -16,6 +17,10 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
     @Query("select * from orders where id=:orderId")
     Order findByOrderId(@Param("orderId") Long orderId);
+
+    @Query("SELECT id AS order_id, pincode, distance_km, weight_kg FROM orders WHERE batch_id IS NULL")
+    List<OrderForBatching> findOrdersForBatching();
+
 
 //    @Modifying
 //    @Query("INSERT INTO orders(id, customerId, batchId, driverId, weightKg, paymentType, paymentStatus, deliveryStatus, address, pincode, lat, lon, otpStatus, createdAt) VALUES (:#{#o.id}, :#{#o.customerId}, :#{#o.batchId}, :#{#o.driverId}, :#{#o.weightKg}, :#{#o.paymentType}, :#{#o.paymentStatus}, :#{#o.deliveryStatus}, :#{#o.address}, :#{#o.pincode}, :#{#o.lat}, :#{#o.lon}, :#{#o.otpStatus}, :#{#o.createdAt})")

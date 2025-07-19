@@ -33,4 +33,8 @@ public class OrderJdbcRepository {
         );
 
     }
+    public void updateOrderBatch(Long orderId, Long batchId) {
+        String sql = "UPDATE orders SET batch_id = ? WHERE id = ?";
+        jdbcTemplate.update(sql, batchId, orderId);
+    }
 }
