@@ -1,10 +1,12 @@
 package com.example.SiloDispatch.services;
 
 import com.example.SiloDispatch.Dto.BatchWithOrdersDTO;
+import com.example.SiloDispatch.Dto.DriverDto;
 import com.example.SiloDispatch.Dto.OrderDTO;
 import com.example.SiloDispatch.models.Batch;
 import com.example.SiloDispatch.models.Order;
 import com.example.SiloDispatch.repositories.BatchRepository;
+import com.example.SiloDispatch.repositories.DriverRepository;
 import com.example.SiloDispatch.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ public class DriverViewService {
 
     private final OrderRepository orderRepository;
     private final BatchRepository batchRepository;
+    private final DriverRepository driverRepository;
 
     public List<BatchWithOrdersDTO> getOrdersGroupedByBatch(Long driverId) {
         List<Order> orders = orderRepository.findByDriverId(driverId);
@@ -57,5 +60,12 @@ public class DriverViewService {
         }
 
         return result;
+    }
+
+    public List<DriverDto> getAvailableDrivers() {
+        return driverRepository.findAll()
+                .stream()
+                .map(driver -> new DriverDto(driver.getId(), driver.getName()))
+                .collect(Collectors.toList());
     }
 }
