@@ -35,6 +35,6 @@ public class Order {
     public enum PaymentType { COD, UPI, PREPAID, UNSPECIFIED}
     public enum PaymentStatus { PENDING, SUCCESS, FAILED }
     public enum DeliveryStatus { PENDING, ARRIVED, DELIVERED }
-    public enum OtpStatus { NONE, SENT, VERIFIED }
+    public enum OtpStatus { EXPIRED, SENT, VERIFIED }
 }
 

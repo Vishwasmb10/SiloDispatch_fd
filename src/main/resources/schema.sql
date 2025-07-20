@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS orders (
     pincode VARCHAR(10),
     lat DOUBLE,
     lon DOUBLE,
-    otp_status ENUM('NONE', 'SENT', 'VERIFIED') DEFAULT 'NONE',
+    otp_status ENUM('EXPIRED', 'SENT', 'VERIFIED') DEFAULT "NULL",
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
     FOREIGN KEY (batch_id) REFERENCES batches(id) ON DELETE SET NULL,
