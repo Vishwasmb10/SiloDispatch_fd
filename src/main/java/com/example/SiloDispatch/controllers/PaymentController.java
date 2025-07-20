@@ -26,5 +26,13 @@ public class PaymentController {
         paymentService.markPaymentSuccess(razorOrderId);
         return ResponseEntity.ok("Payment marked successful");
     }
+
+    @PostMapping("/cash")
+    public ResponseEntity<?> receiveCash(@RequestBody Map<String, Object> payload) {
+        Long orderId = Long.valueOf(payload.get("orderId").toString());
+        paymentService.receiveCash(orderId);
+        return ResponseEntity.ok("Cash payment recorded and delivery marked successful.");
+    }
+
 }
 
