@@ -26,6 +26,9 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     @Query("update orders set otp_status=:otpStatus where id=:orderId")
     void updateOtpStatus(@Param("orderId") Long orderId,@Param("otpStatus") OtpVerification.OtpStatus otpStatus);
 
+    @Modifying
+    @Query("UPDATE orders SET payment_status = :status WHERE id = :orderId")
+    void updatePaymentStatus(Long orderId, Order.PaymentStatus status);
 
 //    @Modifying
 //    @Query("INSERT INTO orders(id, customerId, batchId, driverId, weightKg, paymentType, paymentStatus, deliveryStatus, address, pincode, lat, lon, otpStatus, createdAt) VALUES (:#{#o.id}, :#{#o.customerId}, :#{#o.batchId}, :#{#o.driverId}, :#{#o.weightKg}, :#{#o.paymentType}, :#{#o.paymentStatus}, :#{#o.deliveryStatus}, :#{#o.address}, :#{#o.pincode}, :#{#o.lat}, :#{#o.lon}, :#{#o.otpStatus}, :#{#o.createdAt})")
