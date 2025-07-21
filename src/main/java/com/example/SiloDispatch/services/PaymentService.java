@@ -81,6 +81,8 @@ public class PaymentService {
         payment.setStatus(Order.PaymentStatus.SUCCESS);
         payment.setTransactionId(orderId.toString());
         payment.setMethod(Order.PaymentType.COD);
+        payment.setAmount(order.getAmount());
+        System.out.println(payment.getTransactionId());
         paymentRepo.save(payment);
 
         // 3. Update orders table

@@ -23,5 +23,6 @@ public class DriverController {
     @GetMapping("/{driverId}/orders")
     public List<BatchWithOrdersDTO> getOrdersForDriver(@PathVariable Long driverId) {
         return driverViewService.getOrdersGroupedByBatch(driverId);
+
     }
 }
