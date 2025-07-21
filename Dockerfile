@@ -1,12 +1,12 @@
-# Use a lightweight Java 21 JDK base image
-FROM eclipse-temurin:21-jdk
-
-# Set the working directory inside the container
+# -------- Stage 1: Build with Maven --------
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copy the built jar file
-COPY target/*.jar app.jar
-
-# Run the jar
+# -------- Stage 2: Run the Spring Boot App --------
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
