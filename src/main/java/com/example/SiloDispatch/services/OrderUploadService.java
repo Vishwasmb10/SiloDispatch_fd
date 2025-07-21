@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,19 +23,20 @@ public class OrderUploadService {
 
     public void processCsvOrders(List<OrderCsvDto> orders) {
         for (OrderCsvDto dto : orders) {
-            Customer customer = customerRepository.findByPhone(dto.getCustomerPhone());
+            Optional<Customer> optionalCustomer = customerRepository.findById(dto.getCustomerId());
 
-            if (customer == null) {
+            Customer customer;
+            if (optionalCustomer.isPresent()) {
+                customer = optionalCustomer.get();
+            } else {
                 customer = new Customer(
                         dto.getCustomerId(),
                         dto.getCustomerName(),
                         dto.getCustomerPhone(),
                         dto.getAddress(),
-                        dto.getPincode(),
-                        null, // lat
-                        null  // lon
+                        dto.getPincode()
                 );
-                customerRepository.insert(customer); // Use insert(), NOT save()
+                customerRepository.insert(customer);
             }
 
             Long customerId = (customer != null) ? customer.getId() : dto.getCustomerId();

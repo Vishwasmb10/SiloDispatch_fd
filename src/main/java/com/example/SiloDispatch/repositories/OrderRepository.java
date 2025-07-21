@@ -19,7 +19,18 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     @Query("select * from orders where id=:orderId")
     Order findByOrderId(@Param("orderId") Long orderId);
 
-    @Query("SELECT id AS order_id, pincode, distance_km, weight_kg FROM orders WHERE batch_id IS NULL")
+//    @Query("SELECT id AS order_id, pincode, distance_km, weight_kg FROM orders WHERE batch_id IS NULL")
+//    List<OrderForBatching> findOrdersForBatching();
+
+    @Query("""
+        SELECT id AS order_id,
+               lat,
+               lon,
+               weight_kg,
+               pincode
+        FROM orders
+        WHERE batch_id IS NULL AND lat IS NOT NULL AND lon IS NOT NULL
+    """)
     List<OrderForBatching> findOrdersForBatching();
 
     @Modifying

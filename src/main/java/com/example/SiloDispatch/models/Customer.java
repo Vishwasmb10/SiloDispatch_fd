@@ -17,6 +17,4 @@ public class Customer {
     private String phone;
     private String address;
     private String pincode;
-    private Double lat;
-    private Double lon;
 }

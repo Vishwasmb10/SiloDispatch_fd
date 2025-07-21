@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class OrderForBatching {
     private Long orderId;
-    private String pincode;
-    private BigDecimal distance_km;
+    private BigDecimal lat;
+    private BigDecimal lon;
     private BigDecimal weightKg;
+    private String pincode;
 }
-
