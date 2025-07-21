@@ -68,7 +68,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public void receiveCash(Long orderId) {
+    public BigDecimal receiveCash(Long orderId) {
         // 1. Get the order
         Order order = orderRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
 
@@ -101,6 +101,7 @@ public class PaymentService {
 
         // 5. Add to driver's cash_in_hand
         driverRepo.incrementCashInHand(order.getDriverId(), order.getAmount());
+        return order.getAmount();
     }
 
 }

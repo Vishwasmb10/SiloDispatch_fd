@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Driver Dashboard</title>
+    <link rel="stylesheet" href="driver.css" />
+</head>
+<body>
+<div class="container">
+    <h1>Driver Dashboard</h1>
+
+    <div id="loginSection">
+        <label for="driverIdInput">Enter Driver ID:</label>
+        <input type="number" id="driverIdInput" required />
+        <button id="loadOrdersBtn">Load Orders</button>
+    </div>
+
+    <div id="ordersSection">
+        <h2>Assigned Batches</h2>
+        <div id="ordersContainer"></div>
+    </div>
+</div>
+
+<script src="driver.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+</html>

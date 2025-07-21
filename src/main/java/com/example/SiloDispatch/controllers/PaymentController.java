@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @RestController
@@ -30,8 +31,8 @@ public class PaymentController {
     @PostMapping("/cash")
     public ResponseEntity<?> receiveCash(@RequestBody Map<String, Object> payload) {
         Long orderId = Long.valueOf(payload.get("orderId").toString());
-        paymentService.receiveCash(orderId);
-        return ResponseEntity.ok("Cash payment recorded and delivery marked successful.");
+        BigDecimal amount=paymentService.receiveCash(orderId);
+        return ResponseEntity.ok(amount);
     }
 
 }

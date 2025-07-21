@@ -17,5 +17,8 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
     @Query("INSERT INTO customers(id, name, phone, address, pincode) VALUES (:#{#c.id}, :#{#c.name}, :#{#c.phone}, :#{#c.address}, :#{#c.pincode})")
     void insert(@Param("c") Customer customer);
 
+    @Query("SELECT phone FROM customers WHERE id = :customerId")
+    String findPhoneById(Long customerId);
+
 
 }

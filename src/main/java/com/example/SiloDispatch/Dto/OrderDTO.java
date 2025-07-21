@@ -17,4 +17,7 @@ public class OrderDTO {
     private Order.DeliveryStatus deliveryStatus;
     private Order.PaymentType paymentType;
     private Order.PaymentStatus paymentStatus;
+    private Order.OtpStatus otpStatus;
+    private String phone;
+    private BigDecimal amount;
 }

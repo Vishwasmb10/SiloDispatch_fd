@@ -6,6 +6,7 @@ import com.example.SiloDispatch.Dto.OrderDTO;
 import com.example.SiloDispatch.models.Batch;
 import com.example.SiloDispatch.models.Order;
 import com.example.SiloDispatch.repositories.BatchRepository;
+import com.example.SiloDispatch.repositories.CustomerRepository;
 import com.example.SiloDispatch.repositories.DriverRepository;
 import com.example.SiloDispatch.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class DriverViewService {
     private final OrderRepository orderRepository;
     private final BatchRepository batchRepository;
     private final DriverRepository driverRepository;
+    private final CustomerRepository customerRepository;
 
     public List<BatchWithOrdersDTO> getOrdersGroupedByBatch(Long driverId) {
         List<Order> orders = orderRepository.findByDriverId(driverId);
@@ -43,16 +45,22 @@ public class DriverViewService {
             dto.setStatus(batch.getStatus());
 
             List<OrderDTO> orderDTOs = batchOrders.stream()
-                    .map(order -> new OrderDTO(
-                            order.getId(),
-                            order.getPincode(),
-                            order.getAddress(),
-                            order.getDistanceKm(),
-                            order.getWeightKg(),
-                            order.getDeliveryStatus(),
-                            order.getPaymentType(),
-                            order.getPaymentStatus()
-                    ))
+                    .map(order -> {
+                        String phone = customerRepository.findPhoneById(order.getCustomerId());
+                        return new OrderDTO(
+                                order.getId(),
+                                order.getPincode(),
+                                order.getAddress(),
+                                order.getDistanceKm(),
+                                order.getWeightKg(),
+                                order.getDeliveryStatus(),
+                                order.getPaymentType(),
+                                order.getPaymentStatus(),
+                                order.getOtpStatus(),
+                                phone,
+                                order.getAmount()
+                        );
+                    })
                     .collect(Collectors.toList());
 
             dto.setOrders(orderDTOs);
