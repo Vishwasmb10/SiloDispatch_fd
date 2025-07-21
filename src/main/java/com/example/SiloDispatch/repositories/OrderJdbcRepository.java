@@ -12,9 +12,12 @@ public class OrderJdbcRepository {
 
     public void insert(Order o) {
         jdbcTemplate.update("""
-    INSERT INTO orders(id, customer_id, batch_id, driver_id, weight_kg, payment_type, payment_status,
-                       delivery_status, address, pincode, distance_km, amount, otp_status, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO orders(
+            id, customer_id, batch_id, driver_id, weight_kg, payment_type, payment_status,
+            delivery_status, address, pincode, distance_km, amount, otp_status, created_at,
+            lat, lon
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
                 o.getId(),
                 o.getCustomerId(),
@@ -29,10 +32,12 @@ public class OrderJdbcRepository {
                 o.getDistanceKm(),
                 o.getAmount(),
                 o.getOtpStatus() != null ? o.getOtpStatus().name() : null,
-                o.getCreatedAt()
+                o.getCreatedAt(),
+                o.getLat(),
+                o.getLon()
         );
-
     }
+
     public void updateOrderBatch(Long orderId, Long batchId) {
         String sql = "UPDATE orders SET batch_id = ? WHERE id = ?";
         jdbcTemplate.update(sql, batchId, orderId);

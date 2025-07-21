@@ -25,8 +25,8 @@ public class Order {
     private DeliveryStatus deliveryStatus;
     private String address;
     private String pincode;
-//    private Double lat;
-//    private Double lon;
+    private Double lat;
+    private Double lon;
     private BigDecimal distanceKm;
     private BigDecimal amount;
     private OtpStatus otpStatus;
