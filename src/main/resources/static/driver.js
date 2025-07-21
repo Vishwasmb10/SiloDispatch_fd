@@ -1,7 +1,21 @@
-document.getElementById('loadOrdersBtn').addEventListener('click', async () => {
-  const driverId = document.getElementById('driverIdInput').value;
+window.addEventListener('DOMContentLoaded', async () => {
   const container = document.getElementById('ordersContainer');
-  if (!driverId) return alert("Enter Driver ID");
+  try {
+    const res = await fetch('/api/driver/id');
+    if (!res.ok) {
+      container.innerHTML = `<p style="color:red;">Not authenticated. Please log in again.</p>`;
+      return;
+    }
+
+    const driverId = await res.text();
+    loadOrders(driverId);
+  } catch (err) {
+    container.innerHTML = `<p style="color:red;">Error loading orders: ${err.message}</p>`;
+  }
+});
+
+async function loadOrders(driverId) {
+  const container = document.getElementById('ordersContainer');
 
   try {
     const res = await fetch(`/api/driver/${driverId}/orders`);
@@ -56,7 +70,7 @@ document.getElementById('loadOrdersBtn').addEventListener('click', async () => {
   } catch (err) {
     container.innerHTML = `<p style="color:red;">Error loading orders: ${err.message}</p>`;
   }
-});
+}
 
 async function sendOtp(orderId, phoneNumber) {
   const msg = document.getElementById(`msg-${orderId}`);
@@ -94,7 +108,6 @@ async function verifyOtp(orderId, paymentType, paymentStatus) {
     msg.textContent = text;
 
     if (res.ok) {
-      // Disable input and buttons
       otpInput.disabled = true;
       sendBtn.disabled = true;
       verifyBtn.disabled = true;

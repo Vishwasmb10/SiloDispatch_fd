@@ -85,3 +85,13 @@ CREATE TABLE IF NOT EXISTS cash_ledger (
     FOREIGN KEY (driver_id) REFERENCES drivers(id) ON DELETE CASCADE,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE SET NULL
 );
+
+--user table
+CREATE TABLE IF NOT EXISTS app_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT true,
+    driver_id BIGINT DEFAULT NULL
+);
