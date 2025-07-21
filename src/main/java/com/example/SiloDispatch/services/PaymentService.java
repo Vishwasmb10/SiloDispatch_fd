@@ -61,6 +61,10 @@ public class PaymentService {
         paymentRepo.save(payment);
 
         orderRepo.updatePaymentStatus(payment.getOrderId(), Order.PaymentStatus.SUCCESS);
+
+        Order order = orderRepo.findByOrderId(payment.getOrderId());
+        // For postpaid orders (but not COD), mark as delivered
+        orderRepo.updateDeliveryStatus(order.getId(), Order.DeliveryStatus.DELIVERED);
     }
 
     @Transactional

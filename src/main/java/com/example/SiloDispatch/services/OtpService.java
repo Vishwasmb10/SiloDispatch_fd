@@ -79,7 +79,12 @@ public class OtpService {
         otpRepo.save(record);
         // When OTP is VERIFIED
         orderRepo.updateOtpStatus(orderId, OtpVerification.OtpStatus.VERIFIED); // same here
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
 
+        if (order.getPaymentType() == Order.PaymentType.PREPAID) {
+            orderRepo.updateDeliveryStatus(orderId, Order.DeliveryStatus.DELIVERED);
+        }
 
         return true;
     }
