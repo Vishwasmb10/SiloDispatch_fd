@@ -8,12 +8,33 @@
 </head>
 <body>
 <div class="container">
-    <h1>Driver Dashboard</h1>
+    <div class="header-bar">
+        <h1>Driver Dashboard</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
     <div id="ordersSection">
         <h2>Assigned Batches</h2>
         <div id="ordersContainer"></div>
     </div>
 </div>
+
+<script>
+  function logout() {
+    fetch('/logout', {
+      method: 'POST',
+      credentials: 'include'
+    })
+    .then(res => {
+      if (res.ok) {
+        window.location.href = '/login'; // Adjust if your login page is different
+      } else {
+        alert('Logout failed');
+      }
+    })
+    .catch(() => alert('Error logging out'));
+  }
+</script>
 
 <script src="driver.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
