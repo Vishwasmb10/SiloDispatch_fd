@@ -16,7 +16,7 @@ public interface BatchRepository extends CrudRepository<Batch, Long> {
     int countActiveBatchesForDriver(@Param("driverId") Long driverId);
 
 
-    @Query("SELECT * FROM Batches b WHERE b.driver_id = :driverId AND b.status = :status")
+    @Query("SELECT * FROM batches b WHERE b.driver_id = :driverId AND b.status = :status")
     Batch findByDriverIdAndStatus(@Param("driverId") Long driverId, @Param("status") Batch.BatchStatus status);
 
 
