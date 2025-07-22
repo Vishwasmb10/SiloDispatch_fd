@@ -151,3 +151,15 @@ document.getElementById('settleForm').addEventListener('submit', async function 
     msg.classList.add('error');
   }
 });
+
+document.getElementById("complete-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const driverId = document.getElementById("driverId").value;
+
+            const response = await fetch(`/api/batching/complete/${driverId}`, {
+                method: 'POST'
+            });
+
+            const result = await response.text();
+            document.getElementById("message").textContent = result;
+        });

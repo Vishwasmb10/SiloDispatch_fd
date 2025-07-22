@@ -44,5 +44,24 @@ public class BatchService {
             }
         }
     }
+
+    public boolean markBatchAsCompleted(Long driverId) {
+        Batch activeBatch = batchRepository.findByDriverIdAndStatus(driverId, Batch.BatchStatus.ASSIGNED);
+
+        if (activeBatch == null) {
+            return false;
+        }
+
+        activeBatch.setStatus(Batch.BatchStatus.COMPLETED);
+        batchRepository.save(activeBatch);
+
+//        List<Order> orders = orderRepository.findByBatchId(activeBatch.getId());
+//        for (Order order : orders) {
+//            order.setDelivered(true);
+//        }
+//        orderRepository.saveAll(orders);
+
+        return true;
+    }
 }
 

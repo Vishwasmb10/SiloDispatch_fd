@@ -21,39 +21,32 @@ public class DriverAssignmentService {
 
     public void assignBatches(List<Long> availableDriverIds) {
         List<Batch> unassignedBatches = batchRepository.findByStatus(Batch.BatchStatus.PENDING);
-        Map<Long, Load> driverLoadMap = new HashMap<>();
+        Iterator<Batch> batchIterator = unassignedBatches.iterator();
 
         for (Long driverId : availableDriverIds) {
-            driverLoadMap.put(driverId, new Load(driverId));
-        }
+            if (!batchIterator.hasNext()) break;
 
-        for (Batch batch : unassignedBatches) {
+            // Check if driver already has an assigned or in-progress batch
+            int activeBatchCount = batchRepository.countActiveBatchesForDriver(driverId);
+            if (activeBatchCount > 0) continue; // Skip this driver
+
+            Batch batch = batchIterator.next();
             BigDecimal totalDistance = calculateBatchDistance(batch.getId());
 
-            Long bestDriverId = driverLoadMap.values().stream()
-                    .min(Comparator.comparing(Load::getTotalLoad))
-                    .map(Load::getDriverId)
-                    .orElseThrow();
-
-            // Update batch
-            batch.setDriverId(bestDriverId);
+            // Assign the batch
+            batch.setDriverId(driverId);
             batch.setStatus(Batch.BatchStatus.ASSIGNED);
             batchRepository.save(batch);
 
-            // ✅ Also update all orders in the batch
+            // Update orders in the batch
             List<Order> orders = orderRepository.findByBatchId(batch.getId());
             for (Order order : orders) {
-                order.setDriverId(bestDriverId);
+                order.setDriverId(driverId);
             }
-            orderRepository.saveAll(orders);  // Save all updated orders
-
-            // Update driver's load
-            Load load = driverLoadMap.get(bestDriverId);
-            load.addWeight(batch.getTotalWeight());
-            load.addDistance(totalDistance);
+            orderRepository.saveAll(orders);
         }
-
     }
+
 
     private BigDecimal calculateBatchDistance(Long batchId) {
         List<Order> orders = orderRepository.findByBatchId(batchId);
