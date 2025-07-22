@@ -15,7 +15,11 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +49,7 @@ public class PaymentService {
             payment.setMethod(Order.PaymentType.PREPAID);
             payment.setTransactionId(razorOrder.get("id"));
             payment.setStatus(Order.PaymentStatus.PENDING);
+            payment.setCreatedAt(LocalDateTime.now());
             paymentRepo.save(payment);
 
             return razorOrder.toString();
@@ -83,6 +88,7 @@ public class PaymentService {
         payment.setMethod(Order.PaymentType.COD);
         payment.setAmount(order.getAmount());
         System.out.println(payment.getTransactionId());
+        payment.setCreatedAt(LocalDateTime.now());
         paymentRepo.save(payment);
 
         // 3. Update orders table
@@ -102,6 +108,43 @@ public class PaymentService {
         // 5. Add to driver's cash_in_hand
         driverRepo.incrementCashInHand(order.getDriverId(), order.getAmount());
         return order.getAmount();
+    }
+
+    public boolean verifyAndHandleWebhook(String signature, String payload) {
+        try {
+            String secret = System.getenv("RAZORPAY_WEBHOOK_SECRET"); // Set this as an env variable
+
+            // Compute expected signature
+            Mac sha256Hmac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+            sha256Hmac.init(secretKey);
+            byte[] hash = sha256Hmac.doFinal(payload.getBytes());
+            String expectedSignature = Base64.getEncoder().encodeToString(hash);
+
+            if (!expectedSignature.equals(signature)) {
+                System.out.println("❌ Invalid signature");
+                return false;
+            }
+
+            // Valid signature → parse payload
+            JSONObject json = new JSONObject(payload);
+            String event = json.getString("event");
+
+            if ("payment.captured".equals(event)) {
+                JSONObject paymentObj = json.getJSONObject("payload").getJSONObject("payment").getJSONObject("entity");
+                String razorpayOrderId = paymentObj.getString("order_id");
+                String razorpayPaymentId = paymentObj.getString("id");
+
+                System.out.println("✅ Captured: " + razorpayPaymentId + " for order: " + razorpayOrderId);
+                markPaymentSuccess(razorpayOrderId);
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

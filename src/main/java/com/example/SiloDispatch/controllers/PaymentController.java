@@ -35,5 +35,17 @@ public class PaymentController {
         return ResponseEntity.ok(amount);
     }
 
+    @PostMapping("/razorpayhook")
+    public ResponseEntity<String> handleWebhook(@RequestHeader("X-Razorpay-Signature") String signature,
+                                                @RequestBody String payload) {
+        boolean isValid = paymentService.verifyAndHandleWebhook(signature, payload);
+        if (isValid) {
+            return ResponseEntity.ok("Webhook handled");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid signature");
+        }
+    }
+
+
 }
 
